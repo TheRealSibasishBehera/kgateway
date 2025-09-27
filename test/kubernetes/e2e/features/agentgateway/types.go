@@ -29,5 +29,9 @@ var (
 		"TestAgentgatewayDeployment": {
 			Manifests: []string{defaults.HttpbinManifest, defaults.CurlPodManifest, deployAgentgatewayManifest},
 		},
+		"TestAgentgatewayVersionLogging": {
+			Manifests: []string{defaults.HttpbinManifest, defaults.CurlPodManifest, deployAgentGatewayManifest},
+			Resources: []client.Object{proxyService, proxyDeployment, defaults.CurlPod},
+		},
 	}
 )

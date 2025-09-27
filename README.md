@@ -12,6 +12,8 @@
 
 ## About kgateway
 
+NOTE: this is for testing purposes
+
 Kgateway is:
 
 * **An ingress/edge router for Kubernetes**: Powered by [Envoy](https://www.envoyproxy.io) and programmed with the [Gateway API](https://gateway-api.sigs.k8s.io/), kgateway is a world-leading Cloud Native ingress.
