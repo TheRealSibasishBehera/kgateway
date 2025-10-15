@@ -355,6 +355,15 @@ func translateTrafficPolicyToAgw(
 		agwPolicies = append(agwPolicies, transformationPolicies...)
 	}
 
+	if trafficPolicy.Spec.ExtProc != nil {
+		extProcPolicies, err := processExtProcPolicy(ctx, gatewayExtensions, trafficPolicy, policyName, policyTarget)
+		if err != nil {
+			logger.Error("error processing ExtProc policy", "error", err)
+			errs = append(errs, err)
+		}
+		agwPolicies = append(agwPolicies, extProcPolicies...)
+	}
+
 	return agwPolicies, errors.Join(errs...)
 }
 
@@ -371,7 +380,6 @@ func processExtProcPolicy(ctx krt.HandlerContext, gatewayExtensions krt.Collecti
 	}
 	extProc := (*gwExt).Spec.ExtProc
 
-	//extract the service from the trafficpolicy i guess
 	var extProcSvcTarget *api.BackendReference
 	if extProc.GrpcService != nil && extProc.GrpcService.BackendRef != nil {
 		backendRef := extProc.GrpcService.BackendRef
