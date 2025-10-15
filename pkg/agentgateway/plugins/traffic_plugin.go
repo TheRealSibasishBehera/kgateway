@@ -41,6 +41,7 @@ const (
 	localRateLimitPolicySuffix  = ":rl-local"
 	globalRateLimitPolicySuffix = ":rl-global"
 	transformationPolicySuffix  = ":transformation"
+	extprocPolicySuffix         = ":ext-proc"
 )
 
 var logger = logging.New("agentgateway/plugins")
@@ -355,6 +356,69 @@ func translateTrafficPolicyToAgw(
 	}
 
 	return agwPolicies, errors.Join(errs...)
+}
+
+func processExtProcPolicy(ctx krt.HandlerContext, gatewayExtensions krt.Collection[*v1alpha1.GatewayExtension], trafficPolicy *v1alpha1.TrafficPolicy, policyName string, policyTarget *api.PolicyTarget) ([]AgwPolicy, error) {
+	extensionName := trafficPolicy.Spec.ExtProc.ExtensionRef.Name
+	extensionNamespace := string(ptr.Deref(trafficPolicy.Spec.ExtProc.ExtensionRef.Namespace, ""))
+	if extensionNamespace == "" {
+		extensionNamespace = trafficPolicy.Namespace
+	}
+	gwExtKey := getGatewayExtensionKey(extensionNamespace, string(extensionName))
+	gwExt := krt.FetchOne(ctx, gatewayExtensions, krt.FilterKey(gwExtKey))
+	if gwExt == nil || (*gwExt).Spec.Type != v1alpha1.GatewayExtensionTypeExtProc || (*gwExt).Spec.ExtProc == nil {
+		return nil, fmt.Errorf("gateway extension not found or not of type ExtProc: %s", gwExtKey)
+	}
+	extProc := (*gwExt).Spec.ExtProc
+
+	//extract the service from the trafficpolicy i guess
+	var extProcSvcTarget *api.BackendReference
+	if extProc.GrpcService != nil && extProc.GrpcService.BackendRef != nil {
+		backendRef := extProc.GrpcService.BackendRef
+		serviceName := extProc.GrpcService.BackendRef.Name
+		namespace := trafficPolicy.Namespace
+		if backendRef.Namespace != nil {
+			namespace = string(*extProc.GrpcService.BackendRef.Namespace)
+		}
+		port := uint32(80) // default port
+		if backendRef.Port != nil {
+			port = uint32(*backendRef.Port) //nolint:gosec // G115: Gateway API PortNumber is always valid port range
+		}
+		serviceHost := kubeutils.ServiceFQDN(metav1.ObjectMeta{Name: string(serviceName), Namespace: namespace})
+		extProcSvcTarget = &api.BackendReference{
+			Kind: &api.BackendReference_Service{
+				Service: namespace + "/" + serviceHost,
+			},
+			Port: port,
+		}
+	}
+
+	if extProcSvcTarget == nil {
+		return nil, fmt.Errorf("failed to translate traffic policy: %s missing extprocservice target", trafficPolicy.Name)
+	}
+	extProcPolicySpec := &api.PolicySpec_ExtProc{
+		Target:           extProcSvcTarget,
+		FailureModeAllow: extProc.FailOpen,
+	}
+
+	extProcPolicy := &api.Policy{
+		Name:   policyName + extprocPolicySuffix + attachmentName(policyTarget),
+		Target: policyTarget,
+		Spec: &api.PolicySpec{
+			Kind: &api.PolicySpec_ExtProc_{
+				ExtProc: extProcPolicySpec,
+			},
+		},
+	}
+	logger.Debug("generated ExtProc policy",
+		"policy", trafficPolicy.Name,
+		"agentgateway_policy", extProcPolicy.Name,
+		"target", extProcSvcTarget)
+	return []AgwPolicy{
+		{
+			Policy: extProcPolicy,
+		},
+	}, nil
 }
 
 // processExtAuthPolicy processes ExtAuth configuration and creates corresponding agentgateway policies
