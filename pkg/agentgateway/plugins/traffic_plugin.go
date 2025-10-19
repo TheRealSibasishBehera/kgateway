@@ -875,17 +875,16 @@ func processRateLimitPolicy(ctx krt.HandlerContext, gatewayExtensions krt.Collec
 }
 
 func processExtProcPolicy(ctx krt.HandlerContext, gatewayExtensions krt.Collection[*v1alpha1.GatewayExtension], trafficPolicy *v1alpha1.TrafficPolicy, policyName string, policyTarget *api.PolicyTarget) ([]AgwPolicy, error) {
-	if trafficPolicy.Spec.ExtProc.ExtensionRef == nil {
-		logger.Debug("skipping extproc policy with no extensionRef (likely disable policy)",
-			"policy", trafficPolicy.Name)
-		return nil, nil
-	}
-
+	// TODO: warn if unsupported policy parameters are used?
 	gwExt, err := lookupGatewayExtension(ctx, gatewayExtensions, *trafficPolicy.Spec.ExtProc.ExtensionRef, trafficPolicy.Namespace, v1alpha1.GatewayExtensionTypeExtProc)
 	if err != nil {
 		return nil, err
 	}
+
 	extProc := (*gwExt).Spec.ExtProc
+	if extProc == nil {
+		return nil, fmt.Errorf("extproc provider is missing from gateway extension %s/%s", gwExt.Namespace, gwExt.Namespace)
+	}
 
 	var extProcSvcTarget *api.BackendReference
 	if extProc.GrpcService != nil && extProc.GrpcService.BackendRef != nil {
@@ -909,13 +908,13 @@ func processExtProcPolicy(ctx krt.HandlerContext, gatewayExtensions krt.Collecti
 	}
 
 	if extProcSvcTarget == nil {
-		return nil, fmt.Errorf("extproc policy %s/%s missing grpcService.backendRef in GatewayExtension <place_holder>",
-			trafficPolicy.Namespace, trafficPolicy.Name)
+		return nil, fmt.Errorf("extproc policy %s/%s missing backendRef in gateway extension %s/%s",
+			trafficPolicy.Namespace, trafficPolicy.Name, (*gwExt).Namespace, (*gwExt).Name)
 	}
 
-	extProcPolicySpec := &api.PolicySpec_ExtProc{
-		Target:           extProcSvcTarget,
-		FailureModeAllow: extProc.FailOpen,
+	failureMode := api.PolicySpec_ExtProc_FAIL_CLOSED
+	if extProc.FailOpen {
+		failureMode = api.PolicySpec_ExtProc_FAIL_OPEN
 	}
 
 	extProcPolicy := &api.Policy{
@@ -923,19 +922,20 @@ func processExtProcPolicy(ctx krt.HandlerContext, gatewayExtensions krt.Collecti
 		Target: policyTarget,
 		Spec: &api.PolicySpec{
 			Kind: &api.PolicySpec_ExtProc_{
-				ExtProc: extProcPolicySpec,
+				ExtProc: &api.PolicySpec_ExtProc{
+					Target:      extProcSvcTarget,
+					FailureMode: failureMode,
+				},
 			},
 		},
 	}
+
 	logger.Debug("generated ExtProc policy",
 		"policy", trafficPolicy.Name,
 		"agentgateway_policy", extProcPolicy.Name,
 		"target", extProcSvcTarget)
-	return []AgwPolicy{
-		{
-			Policy: extProcPolicy,
-		},
-	}, nil
+
+	return []AgwPolicy{{Policy: extProcPolicy}}, nil
 }
 
 // processLocalRateLimitPolicy processes local rate limiting configuration
