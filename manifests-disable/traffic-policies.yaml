@@ -1,0 +1,30 @@
+# Gateway-level ExtProc policy - applies to all routes by default
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: TrafficPolicy
+metadata:
+  name: gateway-extproc
+  namespace: default
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: test-gateway
+  extProc:
+    extensionRef:
+      name: ext-proc-extension
+---
+# HTTPRoute-level disable policy - no extensionRef to disable ExtProc
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: TrafficPolicy
+metadata:
+  name: httproute-disable-extproc
+  namespace: default
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: route-with-disable
+  extProc:
+    # Using disable field to explicitly disable ExtProc for this route
+    # This should override the Gateway-level ExtProc policy
+    disable: {}

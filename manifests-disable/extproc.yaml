@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ext-proc-grpc
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ext-proc-grpc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ext-proc-grpc
+    spec:
+      containers:
+        - name: grpc-extproc
+          image: sibseh/basic-sink:fix-2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 50051
+              name: grpc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ext-proc-grpc
+  namespace: default
+spec:
+  selector:
+    app.kubernetes.io/name: ext-proc-grpc
+  ports:
+    - port: 9002
+      targetPort: 50051
+---
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: GatewayExtension
+metadata:
+  name: ext-proc-extension
+  namespace: default
+spec:
+  type: ExtProc
+  extProc:
+    grpcService:
+      backendRef:
+        name: ext-proc-grpc
+        port: 9002

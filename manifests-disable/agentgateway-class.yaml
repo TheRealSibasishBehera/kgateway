@@ -1,0 +1,22 @@
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: GatewayParameters
+metadata:
+  name: agentgateway-params
+  namespace: kgateway-system
+spec:
+  kube:
+    agentgateway:
+      enabled: true
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: kgateway-agentgateway
+spec:
+  controllerName: kgateway.dev/kgateway
+  description: GatewayClass using agentgateway proxy
+  parametersRef:
+    group: gateway.kgateway.dev
+    kind: GatewayParameters
+    name: agentgateway-params
+    namespace: kgateway-system
