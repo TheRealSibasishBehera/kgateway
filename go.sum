@@ -194,8 +194,8 @@ github.com/ProtonMail/gopenpgp/v2 v2.7.1 h1:Awsg7MPc2gD3I7IFac2qE3Gdls0lZW8SzrFZ
 github.com/ProtonMail/gopenpgp/v2 v2.7.1/go.mod h1:/BU5gfAVwqyd8EfC3Eu7zmuhwYQpKs+cGD8M//iiaxs=
 github.com/acarl005/stripansi v0.0.0-20180116102854-5a71ef0e047d h1:licZJFw2RwpHMqeKTCYkitsPqHNxTmd4SNR5r94FGM8=
 github.com/acarl005/stripansi v0.0.0-20180116102854-5a71ef0e047d/go.mod h1:asat636LX7Bqt5lYEZ27JNDcqxfjdBQuJ/MM4CN/Lzo=
-github.com/agentgateway/agentgateway v0.10.3 h1:z5HcuNuiz+NTZR87sU91xsjxvBD9bRP2xOhJwGbgW8Y=
-github.com/agentgateway/agentgateway v0.10.3/go.mod h1:geHd31xH5d8OrCRuRyvnDxBeqSZ9+O9VhL8VJAfcA+E=
+github.com/agentgateway/agentgateway v0.10.4 h1:9zROecngjHJcdWwqoow2N0Ngs+c+yCgAwEptdqYz6n8=
+github.com/agentgateway/agentgateway v0.10.4/go.mod h1:geHd31xH5d8OrCRuRyvnDxBeqSZ9+O9VhL8VJAfcA+E=
 github.com/agnivade/levenshtein v1.2.1 h1:EHBY3UOn1gwdy/VbFwgo4cxecRznFk7fKWN1KOX7eoM=
 github.com/agnivade/levenshtein v1.2.1/go.mod h1:QVVI16kDrtSuwcpd0p1+xMC6Z/VfhtCyDIjcwga4/DU=
 github.com/alcortesm/tgz v0.0.0-20161220082320-9c5fe88206d7/go.mod h1:6zEj6s6u/ghQa61ZWa/C2Aw3RkjiTBOix7dkqa1VLIs=
