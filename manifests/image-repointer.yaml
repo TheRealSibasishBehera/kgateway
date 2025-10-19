@@ -1,0 +1,23 @@
+kind: GatewayParameters
+apiVersion: gateway.kgateway.dev/v1alpha1
+metadata:
+  name: kgateway
+spec:
+  kube:
+    agentgateway:
+      enabled: true
+      logLevel: trace
+      image:
+        tag: v0.10.2-19-ga55910d
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: agentgateway
+spec:
+  controllerName: kgateway.dev/agentgateway
+  parametersRef:
+    group: gateway.kgateway.dev
+    kind: GatewayParameters
+    name: kgateway
+    namespace: default

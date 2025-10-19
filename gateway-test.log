@@ -1,0 +1,246 @@
+=== RUN   TestAgentgatewayIntegration
+=== RUN   TestAgentgatewayIntegration/ExtProc
++ kubectl --context kind-kind apply -f /home/void/kgateway/test/kubernetes/e2e/defaults/testdata/curl_pod.yaml
+namespace/curl created
+pod/curl created
++ kubectl --context kind-kind apply -f /home/void/kgateway/test/kubernetes/e2e/features/agentgateway/extproc/testdata/gateway.yaml
+gateway.gateway.networking.k8s.io/gw created
++ kubectl --context kind-kind apply -f /home/void/kgateway/test/kubernetes/e2e/features/agentgateway/extproc/testdata/backend-service.yaml
+service/backend created
+deployment.apps/backend-0 created
++ kubectl --context kind-kind apply -f /home/void/kgateway/test/kubernetes/e2e/features/agentgateway/extproc/testdata/extproc-service.yaml
+deployment.apps/ext-proc-grpc created
+service/ext-proc-grpc created
+gatewayextension.gateway.kgateway.dev/ext-proc-extension created
+2025-10-19T18:01:41.168022Z	info	expected pod curl/curl to have status Running, but it was Pending
+=== RUN   TestAgentgatewayIntegration/ExtProc/TestExtProcWithGatewayTargetRef
++ kubectl --context kind-kind apply -f /home/void/kgateway/test/kubernetes/e2e/features/agentgateway/extproc/testdata/gateway-targetref.yaml
+httproute.gateway.networking.k8s.io/route-1 created
+httproute.gateway.networking.k8s.io/route-2 created
+trafficpolicy.gateway.kgateway.dev/gateway-test created
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-10-19T18:01:43.458526Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x52c98e0), Matcher:(*matchers.AndMatcher)(0xc00114e930), transformArgType:(*reflect.rtype)(0x57b4fc0), transformedValue:interface {}(nil)}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.124.169:8080...
+* connect to 10.96.124.169 port 8080 failed: Connection refused
+* Failed to connect to gw.default.svc.cluster.local port 8080 after 1 ms: Connection refused
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+* Closing connection 0
+curl: (7) Failed to connect to gw.default.svc.cluster.local port 8080 after 1 ms: Connection refused
+command terminated with exit code 7
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" -H "Host: www.example.com" http://gw.default.svc.cluster.local:8080/
+2025-10-19T18:01:45.570578Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' -H 'Host: www.example.com' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x52c98e0), Matcher:(*matchers.AndMatcher)(0xc00114e930), transformArgType:(*reflect.rtype)(0x57b4fc0), transformedValue:interface {}(nil)}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Extproctest": [
+   "true"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-6vqqb"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.124.169:8080...
+* Connected to gw.default.svc.cluster.local (10.96.124.169) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Sun, 19 Oct 2025 18:01:45 GMT
+< transfer-encoding: chunked
+< 
+{ [413 bytes data]
+100   406    0   406    0     0  55868      0 --:--:-- --:--:-- --:--:-- 58000
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
+success: &{StdErr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.124.169:8080...
+* Connected to gw.default.svc.cluster.local (10.96.124.169) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Sun, 19 Oct 2025 18:01:45 GMT
+< transfer-encoding: chunked
+< 
+{ [413 bytes data]
+100   406    0   406    0     0  55868      0 --:--:-- --:--:-- --:--:-- 58000
+* Connection #0 to host gw.default.svc.cluster.local left intact
+ StdOut:{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Extproctest": [
+   "true"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-6vqqb"
+}}+ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/myapp
+2025-10-19T18:01:45.689767Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/myapp
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x52c9980), Matcher:(*matchers.AndMatcher)(0xc00114e9f0), transformArgType:(*reflect.rtype)(0x57b4fc0), transformedValue:interface {}(nil)}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/myapp",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Extproctest": [
+   "true"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-6vqqb"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.124.169:8080...
+* Connected to gw.default.svc.cluster.local (10.96.124.169) port 8080 (#0)
+> GET /myapp HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Sun, 19 Oct 2025 18:01:45 GMT
+< transfer-encoding: chunked
+< 
+{ [418 bytes data]
+100   411    0   411    0     0  95205      0 --:--:-- --:--:-- --:--:--  100k
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
+success: &{StdErr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.124.169:8080...
+* Connected to gw.default.svc.cluster.local (10.96.124.169) port 8080 (#0)
+> GET /myapp HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Sun, 19 Oct 2025 18:01:45 GMT
+< transfer-encoding: chunked
+< 
+{ [418 bytes data]
+100   411    0   411    0     0  95205      0 --:--:-- --:--:-- --:--:--  100k
+* Connection #0 to host gw.default.svc.cluster.local left intact
+ StdOut:{
+ "path": "/myapp",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Extproctest": [
+   "true"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-6vqqb"
+}}+ kubectl --context kind-kind delete -f /home/void/kgateway/test/kubernetes/e2e/features/agentgateway/extproc/testdata/gateway-targetref.yaml --ignore-not-found
+httproute.gateway.networking.k8s.io "route-1" deleted
+httproute.gateway.networking.k8s.io "route-2" deleted
+trafficpolicy.gateway.kgateway.dev "gateway-test" deleted
++ kubectl --context kind-kind delete -f /home/void/kgateway/test/kubernetes/e2e/defaults/testdata/curl_pod.yaml --ignore-not-found
+namespace "curl" deleted
+pod "curl" deleted
++ kubectl --context kind-kind delete -f /home/void/kgateway/test/kubernetes/e2e/features/agentgateway/extproc/testdata/gateway.yaml --ignore-not-found
+gateway.gateway.networking.k8s.io "gw" deleted
++ kubectl --context kind-kind delete -f /home/void/kgateway/test/kubernetes/e2e/features/agentgateway/extproc/testdata/backend-service.yaml --ignore-not-found
+service "backend" deleted
+deployment.apps "backend-0" deleted
++ kubectl --context kind-kind delete -f /home/void/kgateway/test/kubernetes/e2e/features/agentgateway/extproc/testdata/extproc-service.yaml --ignore-not-found
+deployment.apps "ext-proc-grpc" deleted
+service "ext-proc-grpc" deleted
+gatewayextension.gateway.kgateway.dev "ext-proc-extension" deleted
+--- PASS: TestAgentgatewayIntegration (13.00s)
+    --- PASS: TestAgentgatewayIntegration/ExtProc (12.99s)
+        --- PASS: TestAgentgatewayIntegration/ExtProc/TestExtProcWithGatewayTargetRef (2.59s)
+PASS
+ok  	github.com/kgateway-dev/kgateway/v2/test/kubernetes/e2e/tests	13.048s
