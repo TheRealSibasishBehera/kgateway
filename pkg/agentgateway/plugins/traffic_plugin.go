@@ -355,7 +355,7 @@ func translateTrafficPolicyToAgw(
 		agwPolicies = append(agwPolicies, transformationPolicies...)
 	}
 
-	// Process extproc policies if presnet
+	// Process extproc policies if present
 	if trafficPolicy.Spec.ExtProc != nil {
 		extProcPolicies, err := processExtProcPolicy(ctx, gatewayExtensions, trafficPolicy, policyName, policyTarget)
 		if err != nil {
