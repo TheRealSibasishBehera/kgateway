@@ -41,6 +41,7 @@ const (
 	localRateLimitPolicySuffix  = ":rl-local"
 	globalRateLimitPolicySuffix = ":rl-global"
 	transformationPolicySuffix  = ":transformation"
+	extprocPolicySuffix         = ":ext-proc"
 )
 
 var logger = logging.New("agentgateway/plugins")
@@ -352,6 +353,16 @@ func translateTrafficPolicyToAgw(
 			errs = append(errs, err)
 		}
 		agwPolicies = append(agwPolicies, transformationPolicies...)
+	}
+
+	// Process extproc policies if presnet
+	if trafficPolicy.Spec.ExtProc != nil {
+		extProcPolicies, err := processExtProcPolicy(ctx, gatewayExtensions, trafficPolicy, policyName, policyTarget)
+		if err != nil {
+			logger.Error("error processing extproc policy", "error", err)
+			errs = append(errs, err)
+		}
+		agwPolicies = append(agwPolicies, extProcPolicies...)
 	}
 
 	return agwPolicies, errors.Join(errs...)
@@ -808,6 +819,70 @@ func processRateLimitPolicy(ctx krt.HandlerContext, gatewayExtensions krt.Collec
 	}
 
 	return agwPolicies, nil
+}
+
+func processExtProcPolicy(ctx krt.HandlerContext, gatewayExtensions krt.Collection[*v1alpha1.GatewayExtension], trafficPolicy *v1alpha1.TrafficPolicy, policyName string, policyTarget *api.PolicyTarget) ([]AgwPolicy, error) {
+	if trafficPolicy.Spec.ExtProc.ExtensionRef == nil {
+		logger.Debug("skipping extproc policy with no extensionRef (likely disable policy)",
+			"policy", trafficPolicy.Name)
+		return nil, nil
+	}
+
+	gwExt, err := lookupGatewayExtension(ctx, gatewayExtensions, *trafficPolicy.Spec.ExtProc.ExtensionRef, trafficPolicy.Namespace, v1alpha1.GatewayExtensionTypeExtProc)
+	if err != nil {
+		return nil, err
+	}
+	extProc := (*gwExt).Spec.ExtProc
+
+	var extProcSvcTarget *api.BackendReference
+	if extProc.GrpcService != nil && extProc.GrpcService.BackendRef != nil {
+		backendRef := extProc.GrpcService.BackendRef
+		serviceName := extProc.GrpcService.BackendRef.Name
+		namespace := trafficPolicy.Namespace
+		if backendRef.Namespace != nil {
+			namespace = string(*extProc.GrpcService.BackendRef.Namespace)
+		}
+		port := uint32(80) // default port
+		if backendRef.Port != nil {
+			port = uint32(*backendRef.Port) //nolint:gosec // G115: Gateway API PortNumber is always valid port range
+		}
+		serviceHost := kubeutils.ServiceFQDN(metav1.ObjectMeta{Name: string(serviceName), Namespace: namespace})
+		extProcSvcTarget = &api.BackendReference{
+			Kind: &api.BackendReference_Service{
+				Service: namespace + "/" + serviceHost,
+			},
+			Port: port,
+		}
+	}
+
+	if extProcSvcTarget == nil {
+		return nil, fmt.Errorf("extproc policy %s/%s missing grpcService.backendRef in GatewayExtension <place_holder>",
+			trafficPolicy.Namespace, trafficPolicy.Name)
+	}
+
+	extProcPolicySpec := &api.PolicySpec_ExtProc{
+		Target:           extProcSvcTarget,
+		FailureModeAllow: extProc.FailOpen,
+	}
+
+	extProcPolicy := &api.Policy{
+		Name:   policyName + extprocPolicySuffix + attachmentName(policyTarget),
+		Target: policyTarget,
+		Spec: &api.PolicySpec{
+			Kind: &api.PolicySpec_ExtProc_{
+				ExtProc: extProcPolicySpec,
+			},
+		},
+	}
+	logger.Debug("generated ExtProc policy",
+		"policy", trafficPolicy.Name,
+		"agentgateway_policy", extProcPolicy.Name,
+		"target", extProcSvcTarget)
+	return []AgwPolicy{
+		{
+			Policy: extProcPolicy,
+		},
+	}, nil
 }
 
 // processLocalRateLimitPolicy processes local rate limiting configuration
