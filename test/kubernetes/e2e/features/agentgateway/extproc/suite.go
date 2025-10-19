@@ -63,7 +63,6 @@ func (s *testingSuite) SetupSuite() {
 }
 
 // TestExtProcWithGatewayTargetRef tests ExtProc with targetRef to Gateway in agentgateway
-// This demonstrates that ExtProc applies to ALL routes when targeting the Gateway
 func (s *testingSuite) TestExtProcWithGatewayTargetRef() {
 	s.TestInstallation.Assertions.EventuallyGatewayCondition(
 		s.Ctx,
@@ -140,7 +139,6 @@ func (s *testingSuite) TestExtProcWithGatewayTargetRef() {
 }
 
 // TestExtProcWithHTTPRouteTargetRef tests ExtProc with targetRef to HTTPRoute in agentgateway
-// This demonstrates that ExtProc can be selectively applied to specific HTTPRoutes
 func (s *testingSuite) TestExtProcWithHTTPRouteTargetRef() {
 	s.TestInstallation.Assertions.EventuallyGatewayCondition(
 		s.Ctx,

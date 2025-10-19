@@ -14,6 +14,7 @@ spec:
     spec:
       containers:
         - name: ext-proc-grpc
+          #TODO: use a ghcr based image 
           image: sibseh/basic-sink:fix-2
           imagePullPolicy: IfNotPresent
           ports:
