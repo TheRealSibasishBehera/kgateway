@@ -1033,6 +1033,8 @@ spec:
                     description: |-
                       Disable all external processing filters.
                       Can be used to disable external processing policies applied at a higher level in the config hierarchy.
+                      Envoy: Supported
+                      Agentgateway: Not Supported (ignored)
                     type: object
                   extensionRef:
                     description: ExtensionRef references the GatewayExtension that
@@ -1055,8 +1057,10 @@ spec:
                     - name
                     type: object
                   processingMode:
-                    description: ProcessingMode defines how the filter should interact
-                      with the request/response streams
+                    description: |-
+                      ProcessingMode defines how the filter should interact with the request/response streams
+                      Envoy: Supported
+                      Agentgateway: Not Supported (ignored)
                     properties:
                       requestBodyMode:
                         default: NONE

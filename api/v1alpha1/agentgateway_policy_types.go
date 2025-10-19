@@ -530,6 +530,10 @@ type AgentExtProcPolicy struct {
 	// backendRef references the External Processor server to reach.
 	// Supported types: Service and Backend.
 	BackendRef gwv1.BackendObjectReference `json:"backendRef,omitempty"`
+
+	// FailOpen determines if requests are allowed when the ext proc service is unavailable.
+	// Defaults to true, meaning requests are allowed upstream even if the ext proc service is unavailable.
+	FailOpen bool `json:"failOpen,omitempty"`
 }
 
 type AgentExtAuthPolicy struct {

@@ -17,10 +17,14 @@ type ExtProcProvider struct {
 	FailOpen bool `json:"failOpen,omitempty"`
 
 	// ProcessingMode defines how the filter should interact with the request/response streams.
+	// Envoy: Supported
+	// Agentgateway: Not Supported (ignored)
 	// +optional
 	ProcessingMode *ProcessingMode `json:"processingMode,omitempty"`
 
 	// MessageTimeout is the timeout for each message sent to the external processing server.
+	// Envoy: Supported
+	// Agentgateway: Not Supported (ignored)
 	// +optional
 	// +kubebuilder:validation:XValidation:rule="matches(self, '^([0-9]{1,5}(h|m|s|ms)){1,4}$')",message="invalid timeout value"
 	// +kubebuilder:validation:XValidation:rule="duration(self) >= duration('1ms')",message="timeout must be at least 1ms."
@@ -28,6 +32,8 @@ type ExtProcProvider struct {
 
 	// MaxMessageTimeout specifies the upper bound of override_message_timeout that may be sent from the external processing server.
 	// The default value 0, which effectively disables the override_message_timeout API.
+	// Envoy: Supported
+	// Agentgateway: Not Supported (ignored)
 	// +optional
 	// +kubebuilder:validation:XValidation:rule="matches(self, '^([0-9]{1,5}(h|m|s|ms)){1,4}$')",message="invalid timeout value"
 	// +kubebuilder:validation:XValidation:rule="duration(self) >= duration('1ms')",message="timeout must be at least 1ms."
@@ -35,21 +41,26 @@ type ExtProcProvider struct {
 
 	// StatPrefix is an optional prefix to include when emitting stats from the extproc filter,
 	// enabling different instances of the filter to have unique stats.
+	// Envoy: Supported
+	// Agentgateway: Not Supported (ignored)
 	// +optional
 	// +kubebuilder:validation:MinLength=1
 	StatPrefix *string `json:"statPrefix,omitempty"`
 
 	// RouteCacheAction describes the route cache action to be taken when an
 	// external processor response is received in response to request headers.
-	// The default behavior is "FromResponse" which will only clear the route cache when
-	// an external processing response has the clear_route_cache field set.
+	// If not specified, the Envoy default value of "FromResponse" will be used, which only clears
+	// the route cache when an external processing response has the clear_route_cache field set.
+	// Envoy: Supported (default: FromResponse)
+	// Agentgateway: Not Supported (ignored)
 	// +optional
 	// +kubebuilder:validation:Enum=FromResponse;Clear;Retain
-	// +kubebuilder:default=FromResponse
 	RouteCacheAction ExtProcRouteCacheAction `json:"routeCacheAction,omitempty"`
 
 	// MetadataOptions allows configuring metadata namespaces to forwarded or received from the external
 	// processing server.
+	// Envoy: Supported
+	// Agentgateway: Not Supported (ignored)
 	// +optional
 	MetadataOptions *MetadataOptions `json:"metadataOptions,omitempty"`
 }
@@ -77,11 +88,15 @@ type ExtProcPolicy struct {
 	ExtensionRef *NamespacedObjectReference `json:"extensionRef,omitempty"`
 
 	// ProcessingMode defines how the filter should interact with the request/response streams
+	// Envoy: Supported
+	// Agentgateway: Not Supported (ignored)
 	// +optional
 	ProcessingMode *ProcessingMode `json:"processingMode,omitempty"`
 
 	// Disable all external processing filters.
 	// Can be used to disable external processing policies applied at a higher level in the config hierarchy.
+	// Envoy: Supported
+	// Agentgateway: Not Supported (ignored)
 	// +optional
 	Disable *PolicyDisable `json:"disable,omitempty"`
 }
