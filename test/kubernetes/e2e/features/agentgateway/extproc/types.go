@@ -29,11 +29,11 @@ var (
 
 	timeout = 60 * time.Second
 
-	gatewayManifest                   = getTestFile("gateway.yaml")
-	routeWithTargetReferenceManifest  = getTestFile("httproute-targetref.yaml")
+	gatewayManifest                  = getTestFile("gateway.yaml")
+	routeWithTargetReferenceManifest = getTestFile("httproute-targetref.yaml")
 	gatewayTargetReferenceManifest   = getTestFile("gateway-targetref.yaml")
-	extProcWithServiceManifest        = getTestFile("extproc-service.yaml")
-	backendWithServiceManifest        = getTestFile("backend-service.yaml")
+	extProcWithServiceManifest       = getTestFile("extproc-service.yaml")
+	backendWithServiceManifest       = getTestFile("backend-service.yaml")
 )
 
 func getTestFile(filename string) string {

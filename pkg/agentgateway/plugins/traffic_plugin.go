@@ -972,8 +972,8 @@ func validateExtProcProvider(provider *v1alpha1.ExtProcProvider) error {
 		errs = append(errs, fmt.Errorf("statPrefix field in ExtProcProvider is not supported for agentgateway"))
 	}
 
-	// TODO: RouteCacheAction has a kubebuilder default and is marked as "ignored" for agentgateway,
-	// so we don't validate it here to avoid false positives when the default is automatically applied.
+	// TODO: RouteCacheAction has a kubebuilder default so we don't validate it here
+	// to avoid false positives when the default is automatically applied.
 
 	if provider.MetadataOptions != nil {
 		errs = append(errs, fmt.Errorf("metadataOptions field in ExtProcProvider is not supported for agentgateway"))
