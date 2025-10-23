@@ -875,7 +875,13 @@ func processRateLimitPolicy(ctx krt.HandlerContext, gatewayExtensions krt.Collec
 }
 
 func processExtProcPolicy(ctx krt.HandlerContext, gatewayExtensions krt.Collection[*v1alpha1.GatewayExtension], trafficPolicy *v1alpha1.TrafficPolicy, policyName string, policyTarget *api.PolicyTarget) ([]AgwPolicy, error) {
-	// TODO: warn if unsupported policy parameters are used?
+	var errs []error
+
+	// validate that unsupported ExtProcPolicy fields are not set
+	if err := validateExtProcPolicy(trafficPolicy.Spec.ExtProc); err != nil {
+		errs = append(errs, err)
+	}
+
 	gwExt, err := lookupGatewayExtension(ctx, gatewayExtensions, *trafficPolicy.Spec.ExtProc.ExtensionRef, trafficPolicy.Namespace, v1alpha1.GatewayExtensionTypeExtProc)
 	if err != nil {
 		return nil, err
@@ -886,24 +892,17 @@ func processExtProcPolicy(ctx krt.HandlerContext, gatewayExtensions krt.Collecti
 		return nil, fmt.Errorf("extproc provider is missing from gateway extension %s/%s", gwExt.Namespace, gwExt.Namespace)
 	}
 
+	// validate that unsupported ExtProcProvider fields are not set
+	if err := validateExtProcProvider(extProc); err != nil {
+		errs = append(errs, err)
+	}
+
 	var extProcSvcTarget *api.BackendReference
 	if extProc.GrpcService != nil && extProc.GrpcService.BackendRef != nil {
-		backendRef := extProc.GrpcService.BackendRef
-		serviceName := extProc.GrpcService.BackendRef.Name
-		namespace := trafficPolicy.Namespace
-		if backendRef.Namespace != nil {
-			namespace = string(*extProc.GrpcService.BackendRef.Namespace)
-		}
-		port := uint32(80) // default port
-		if backendRef.Port != nil {
-			port = uint32(*backendRef.Port) //nolint:gosec // G115: Gateway API PortNumber is always valid port range
-		}
-		serviceHost := kubeutils.ServiceFQDN(metav1.ObjectMeta{Name: string(serviceName), Namespace: namespace})
-		extProcSvcTarget = &api.BackendReference{
-			Kind: &api.BackendReference_Service{
-				Service: namespace + "/" + serviceHost,
-			},
-			Port: port,
+		var err error
+		extProcSvcTarget, err = buildAGWServiceRef(extProc.GrpcService.BackendRef, trafficPolicy.Namespace)
+		if err != nil {
+			return nil, fmt.Errorf("failed to build extproc service reference: %w", err)
 		}
 	}
 
@@ -935,7 +934,52 @@ func processExtProcPolicy(ctx krt.HandlerContext, gatewayExtensions krt.Collecti
 		"agentgateway_policy", extProcPolicy.Name,
 		"target", extProcSvcTarget)
 
-	return []AgwPolicy{{Policy: extProcPolicy}}, nil
+	return []AgwPolicy{{Policy: extProcPolicy}}, errors.Join(errs...)
+}
+
+// validateExtProcPolicy validates that unsupported ExtProcPolicy fields are not set.
+func validateExtProcPolicy(policy *v1alpha1.ExtProcPolicy) error {
+	var errs []error
+
+	if policy.ProcessingMode != nil {
+		errs = append(errs, fmt.Errorf("processingMode field is not supported for agentgateway"))
+	}
+
+	if policy.Disable != nil {
+		errs = append(errs, fmt.Errorf("disable field is not supported for agentgateway"))
+	}
+
+	return errors.Join(errs...)
+}
+
+// validateExtProcProvider validates that unsupported ExtProcProvider fields are not set.
+func validateExtProcProvider(provider *v1alpha1.ExtProcProvider) error {
+	var errs []error
+
+	if provider.ProcessingMode != nil {
+		errs = append(errs, fmt.Errorf("processingMode field in ExtProcProvider is not supported for agentgateway"))
+	}
+
+	if provider.MessageTimeout != nil {
+		errs = append(errs, fmt.Errorf("messageTimeout field in ExtProcProvider is not supported for agentgateway"))
+	}
+
+	if provider.MaxMessageTimeout != nil {
+		errs = append(errs, fmt.Errorf("maxMessageTimeout field in ExtProcProvider is not supported for agentgateway"))
+	}
+
+	if provider.StatPrefix != nil {
+		errs = append(errs, fmt.Errorf("statPrefix field in ExtProcProvider is not supported for agentgateway"))
+	}
+
+	// TODO: RouteCacheAction has a kubebuilder default and is marked as "ignored" for agentgateway,
+	// so we don't validate it here to avoid false positives when the default is automatically applied.
+
+	if provider.MetadataOptions != nil {
+		errs = append(errs, fmt.Errorf("metadataOptions field in ExtProcProvider is not supported for agentgateway"))
+	}
+
+	return errors.Join(errs...)
 }
 
 // processLocalRateLimitPolicy processes local rate limiting configuration
