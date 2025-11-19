@@ -1,0 +1,72 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: route-with-failopen
+spec:
+  parentRefs:
+    - name: gw
+  hostnames:
+    - "failopen.example.com"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: backend
+          port: 3000
+---
+# AgentgatewayPolicy with failOpen set to true
+# When the ext-proc service is unavailable, requests will still be allowed
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: failopen-test
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: route-with-failopen
+  traffic:
+    extProc:
+      backendRef:
+        name: ext-proc-grpc
+        port: 4444
+      failOpen: true
+---
+# AgentgatewayPolicy with failOpen set to false (or omitted - default)
+# When the ext-proc service is unavailable, requests will be rejected
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: route-with-failclosed
+spec:
+  parentRefs:
+    - name: gw
+  hostnames:
+    - "failclosed.example.com"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: backend
+          port: 3000
+---
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: failclosed-test
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: route-with-failclosed
+  traffic:
+    extProc:
+      backendRef:
+        name: ext-proc-grpc
+        port: 4444
+      failOpen: false
