@@ -1,0 +1,1 @@
+Error from server (BadRequest): container "backend-0" in pod "backend-0-756dd7d576-hjwfz" is waiting to start: ContainerCreating

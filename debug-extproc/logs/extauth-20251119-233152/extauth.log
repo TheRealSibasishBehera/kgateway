@@ -1,0 +1,4 @@
+2025/11/19 18:02:08 Starting HTTP server at [::]:8000
+2025/11/19 18:02:08 Starting gRPC server at [::]:9000
+2025/11/19 18:03:57 GRPC server stopped
+2025/11/19 18:03:57 Failed to start HTTP server: http: Server closed

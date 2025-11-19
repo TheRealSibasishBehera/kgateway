@@ -1,0 +1,1 @@
+Error from server (BadRequest): container "agent-gateway" in pod "gw-84ff7d7796-5svhj" is waiting to start: ContainerCreating

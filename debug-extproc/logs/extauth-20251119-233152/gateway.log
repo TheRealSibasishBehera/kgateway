@@ -1,0 +1,186 @@
+2025-11-19T18:02:23.558813Z	info	agentgateway	version: {
+  "version": "unknown",
+  "git_revision": "unknown",
+  "rust_version": "1.90.0",
+  "build_profile": "release",
+  "build_target": "aarch64-unknown-linux-gnu"
+}	
+2025-11-19T18:02:23.559144Z	info	agentgateway	running with config: network: ''
+terminationMaxDeadline: 55s
+terminationMinDeadline: 10s
+numWorkerThreads: 4
+adminAddr:
+  Localhost:
+  - true
+  - 15000
+statsAddr:
+  SocketAddr: '[::]:15020'
+readinessAddr:
+  SocketAddr: '[::]:15021'
+selfAddr: super-gateway.default.svc.cluster.local
+hbone:
+  windowSize: 4194304
+  connectionWindowSize: 16777216
+  frameSize: 1048576
+  poolMaxStreamsPerConn: 100
+  poolUnusedReleaseTimeout:
+    secs: 300
+    nanos: 0
+xds:
+  address: http://kgateway.agent-gateway-test.svc.cluster.local:9978
+  auth:
+    token:
+    - ./var/run/secrets/xds-tokens/xds-token
+    - Kubernetes
+  caCert: Default
+  namespace: default
+  gateway: super-gateway
+  localConfig: /config/config.yaml
+ca: null
+tracing:
+  endpoint: null
+  headers: {}
+  protocol: grpc
+  fields:
+    remove: []
+    add: {}
+  random_sampling: null
+  client_sampling: null
+logging:
+  filter: null
+  fields:
+    remove: []
+    add: {}
+  metric_fields:
+    add: {}
+  excluded_metrics: []
+  level: ''
+  format: text
+dns:
+  resolverCfg:
+    domain: null
+    search:
+    - default.svc.cluster.local
+    - svc.cluster.local
+    - cluster.local
+    name_servers:
+    - socket_addr: 10.96.0.10:53
+      protocol: udp
+      tls_dns_name: null
+      http_endpoint: null
+      trust_negative_responses: false
+      bind_addr: null
+    - socket_addr: 10.96.0.10:53
+      protocol: tcp
+      tls_dns_name: null
+      http_endpoint: null
+      trust_negative_responses: false
+      bind_addr: null
+  resolverOpts:
+    ndots: 5
+    timeout:
+      secs: 5
+      nanos: 0
+    attempts: 2
+    check_names: true
+    edns0: false
+    validate: false
+    ip_strategy: Ipv4thenIpv6
+    cache_size: 32
+    use_hosts_file: Auto
+    positive_min_ttl: null
+    negative_min_ttl: null
+    positive_max_ttl: null
+    negative_max_ttl: null
+    num_concurrent_reqs: 2
+    preserve_intermediates: true
+    try_tcp_on_error: false
+    server_ordering_strategy: QueryStatistics
+    recursion_desired: true
+    avoid_local_udp_ports: []
+    os_port_selection: false
+    case_randomization: false
+    trust_anchor: null
+proxyMetadata:
+  instanceIp: 1.1.1.1
+  podName: super-gateway-5d745dc5d8-fstzv
+  podNamespace: default
+  nodeName: super-gateway-5d745dc5d8-fstzv
+  role: default~super-gateway
+  nodeId: agentgateway~1.1.1.1~super-gateway-5d745dc5d8-fstzv.default~default.svc.cluster.local
+threadingMode: multithreaded
+backend:
+  keepalives:
+    enabled: true
+    time: 3m0s
+    interval: 3m0s
+    retries: 9
+  connectTimeout: 10s
+listener:
+  maxBufferSize: 2097152
+  tlsHandshakeTimeout: 15s
+  http1MaxHeaders: null
+  http1IdleTimeout: 10m0s
+  http2WindowSize: null
+  http2ConnectionWindowSize: null
+  http2FrameSize: null
+  http2KeepaliveInterval: null
+  http2KeepaliveTimeout: null
+	
+2025-11-19T18:02:23.559964Z	info	management::hyper_helpers	listener established	address=[::]:15021 component="readiness"
+2025-11-19T18:02:23.562037Z	info	state_manager	Watching config file: /config/config.yaml	
+2025-11-19T18:02:23.562205Z	info	state_manager	loaded config from File("/config/config.yaml")	
+2025-11-19T18:02:23.562373Z	info	app	serving UI at http://localhost:15000/ui	
+2025-11-19T18:02:23.562429Z	info	agent_core::readiness	Task 'agentgateway' complete (3.864069ms), still awaiting 1 tasks	
+2025-11-19T18:02:23.562433Z	info	management::hyper_helpers	listener established	address=127.0.0.1:15000 component="admin"
+2025-11-19T18:02:23.562447Z	info	management::hyper_helpers	listener established	address=[::]:15020 component="stats"
+2025-11-19T18:02:23.569330Z	info	agent_xds::client:xds{id=1}	Stream established	
+2025-11-19T18:02:23.569382Z	info	agent_xds::client:xds{id=1}	received response	type_url="type.googleapis.com/agentgateway.dev.workload.Address" size=33 removes=0
+2025-11-19T18:02:23.569529Z	info	agent_xds::client:xds{id=1}	received response	type_url="type.googleapis.com/agentgateway.dev.resource.Resource" size=3 removes=0
+2025-11-19T18:02:23.569592Z	info	agent_core::readiness	Task 'state manager' complete (11.027252ms), marking server ready	
+2025-11-19T18:02:23.569677Z	info	proxy::gateway	started bind	bind="8080/default/super-gateway"
+2025-11-19T18:02:24.435741Z	info	agent_xds::client:xds{id=1}	received response	type_url="type.googleapis.com/agentgateway.dev.workload.Address" size=1 removes=0
+2025-11-19T18:02:25.436264Z	info	agent_xds::client:xds{id=1}	received response	type_url="type.googleapis.com/agentgateway.dev.workload.Address" size=1 removes=0
+2025-11-19T18:02:27.451246Z	info	agent_xds::client:xds{id=1}	received response	type_url="type.googleapis.com/agentgateway.dev.resource.Resource" size=2 removes=0
+2025-11-19T18:02:27.639134Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:59442 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=1ms
+2025-11-19T18:02:29.939182Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:59446 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:02:32.177914Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:59448 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:02:34.464669Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:39236 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:02:36.843428Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:39244 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=1ms
+2025-11-19T18:02:39.145445Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:39250 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:02:41.481759Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:39252 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:02:43.781978Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:39256 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:02:45.998381Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:34894 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:02:48.379871Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:34898 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:02:50.678362Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:34902 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:02:52.906542Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:34914 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:02:55.275995Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:58180 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:02:57.499746Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:58190 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:02:59.879621Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:58202 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:03:02.114267Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:58218 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:03:04.437289Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:49654 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:03:06.665094Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:49670 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:03:09.41426Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:49676 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:03:11.277591Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:49686 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:03:13.507500Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:49698 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:03:15.808128Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:47458 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:03:18.99801Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:47474 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:03:20.406232Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:47476 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:03:22.777544Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:47484 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:03:24.980575Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:36046 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:03:27.337661Z	info	request gateway=default/super-gateway listener=http route=default/hey-its-a-route endpoint=10.244.0.22:3000 src.addr=10.244.0.21:36048 http.method=GET http.host=example.com http.path=/ http.version=HTTP/1.1 http.status=200 protocol=http duration=0ms
+2025-11-19T18:03:52.091176Z	info	agent_xds::client:xds{id=1}	received response	type_url="type.googleapis.com/agentgateway.dev.workload.Address" size=0 removes=1
+2025-11-19T18:03:52.091251Z	info	agent_xds::client:xds{id=1}	received response	type_url="type.googleapis.com/agentgateway.dev.resource.Resource" size=0 removes=2
+2025-11-19T18:03:57.631449Z	info	agent_core::signal::imp	received signal SIGTERM, starting shutdown	
+2025-11-19T18:03:57.631659Z	info	management::hyper_helpers	listener drained	address=127.0.0.1:15000 component="admin"
+2025-11-19T18:03:57.631689Z	info	management::hyper_helpers	listener drained	address=127.0.0.1:15000 component="admin"
+2025-11-19T18:03:57.631773Z	info	management::hyper_helpers	listener drained	address=[::]:15020 component="stats"
+2025-11-19T18:03:57.639629Z	info	agent_core::drain	drain started, waiting 10s-55s for any connections to complete	component="bind 8080/default/super-gateway"
+2025-11-19T18:03:57.639918Z	info	proxy::gateway	stop listening for binds; drain started	
+2025-11-19T18:03:57.639926Z	info	management::hyper_helpers	listener drained	address=[::]:15021 component="readiness"
+2025-11-19T18:03:57.775079Z	info	agent_xds::client:xds{id=1}	received response	type_url="type.googleapis.com/agentgateway.dev.resource.Resource" size=0 removes=3
+2025-11-19T18:03:57.775141Z	info	agent_xds::client:xds{id=1}	received response	type_url="type.googleapis.com/agentgateway.dev.workload.Address" size=1 removes=5
+2025-11-19T18:04:07.641910Z	info	agent_core::drain	minimum drain completed, waiting, not accepting new connections and waiting 55s for any connections to complete	component="bind 8080/default/super-gateway"
+2025-11-19T18:04:07.641954Z	info	agent_core::drain	shutdown complete	component="bind 8080/default/super-gateway"
+2025-11-19T18:04:07.642003Z	info	proxy::gateway	bind complete Ok(Ok(()))	
+2025-11-19T18:04:07.642017Z	info	proxy::gateway	binds drained	

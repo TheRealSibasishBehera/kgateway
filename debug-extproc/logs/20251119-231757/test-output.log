@@ -1,0 +1,1959 @@
+=== RUN   TestAgentgatewayIntegration
+{"time":"2025-11-19T23:18:08.423162+05:30","level":"info","msg":"found Helm index file","component":"helper/install","path":"/Users/sibasishbehera/kgateway/_test/index.yaml"}
+{"time":"2025-11-19T23:18:08.423182+05:30","level":"info","msg":"version of Helm chart","component":"helper/install","chart":"kgateway-crds","version":"1.0.1-dev"}
++ helm upgrade --install kgateway-crds /Users/sibasishbehera/kgateway/_test/kgateway-crds-1.0.1-dev.tgz --namespace agent-gateway-test --create-namespace
+Release "kgateway-crds" does not exist. Installing it now.
+I1119 23:18:08.998558   37548 warnings.go:110] "Warning: unrecognized format \"int32\""
+I1119 23:18:08.998569   37548 warnings.go:110] "Warning: unrecognized format \"int32\""
+I1119 23:18:08.998657   37548 warnings.go:110] "Warning: unrecognized format \"int64\""
+I1119 23:18:09.005683   37548 warnings.go:110] "Warning: unrecognized format \"int32\""
+I1119 23:18:09.005695   37548 warnings.go:110] "Warning: unrecognized format \"int64\""
+I1119 23:18:09.005748   37548 warnings.go:110] "Warning: unrecognized format \"int32\""
+I1119 23:18:09.005751   37548 warnings.go:110] "Warning: unrecognized format \"int64\""
+I1119 23:18:09.031082   37548 warnings.go:110] "Warning: unrecognized format \"int32\""
+I1119 23:18:09.031098   37548 warnings.go:110] "Warning: unrecognized format \"int64\""
+I1119 23:18:09.038398   37548 warnings.go:110] "Warning: unrecognized format \"int32\""
+I1119 23:18:09.038411   37548 warnings.go:110] "Warning: unrecognized format \"int64\""
+I1119 23:18:09.039716   37548 warnings.go:110] "Warning: unrecognized format \"int64\""
+I1119 23:18:09.039724   37548 warnings.go:110] "Warning: unrecognized format \"int32\""
+I1119 23:18:09.155667   37548 warnings.go:110] "Warning: unrecognized format \"int32\""
+I1119 23:18:09.155680   37548 warnings.go:110] "Warning: unrecognized format \"int64\""
+NAME: kgateway-crds
+LAST DEPLOYED: Wed Nov 19 23:18:08 2025
+NAMESPACE: agent-gateway-test
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+Thank you for installing the kgateway-crds chart.
+
+This chart installs the Custom Resource Definitions (CRDs) required by kgateway.
+
+To verify that the CRDs have been installed:
+
+  kubectl get crds | grep 'kgateway'
+
+To uninstall the CRDs:
+
+  helm uninstall kgateway-crds --namespace agent-gateway-test
+
+Note: The above command will remove the Custom Resource Definitions (CRDs) installed by this chart.
+
+To learn how to access and use kgateway, please visit the official documentation:
+
+  https://kgateway.dev/docs/about/custom-resources/#kgateway
+{"time":"2025-11-19T23:18:09.335742+05:30","level":"info","msg":"found Helm index file","component":"helper/install","path":"/Users/sibasishbehera/kgateway/_test/index.yaml"}
+{"time":"2025-11-19T23:18:09.335771+05:30","level":"info","msg":"version of Helm chart","component":"helper/install","chart":"kgateway","version":"1.0.1-dev"}
++ helm upgrade --install kgateway /Users/sibasishbehera/kgateway/_test/kgateway-1.0.1-dev.tgz --namespace agent-gateway-test --create-namespace --values /Users/sibasishbehera/kgateway/test/e2e/tests/manifests/common-recommendations.yaml --values /Users/sibasishbehera/kgateway/test/e2e/tests/manifests/agent-gateway-integration.yaml
+Release "kgateway" does not exist. Installing it now.
+NAME: kgateway
+LAST DEPLOYED: Wed Nov 19 23:18:09 2025
+NAMESPACE: agent-gateway-test
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+Thank you for installing the kgateway chart.
+
+Your release "kgateway" has been deployed in the "agent-gateway-test" namespace.
+
+To check the status of the deployment:
+
+  helm status kgateway --namespace agent-gateway-test
+
+To view the resources created by this chart:
+
+  kubectl get all -n agent-gateway-test
+
+To learn how to access and use kgateway, please visit the official documentation:
+
+  https://kgateway.dev/docs/
+
+To uninstall the kgateway deployment:
+
+  helm uninstall kgateway --namespace agent-gateway-test
+2025-11-19T17:48:09.733465Z	info	expected pod agent-gateway-test/kgateway-5d5d5d77f7-kwb6v to have status Running, but it was Pending
+2025-11-19T17:48:11.739768Z	info	expected pod agent-gateway-test/kgateway-5d5d5d77f7-kwb6v to have condition ready, but it was not ready
+=== RUN   TestAgentgatewayIntegration/Extproc
++ kubectl --context kind-kind apply -f /Users/sibasishbehera/kgateway/test/e2e/defaults/testdata/curl_pod.yaml
+namespace/curl created
+pod/curl created
++ kubectl --context kind-kind apply -f /Users/sibasishbehera/kgateway/test/e2e/features/agentgateway/extproc/testdata/gateway.yaml
+gateway.gateway.networking.k8s.io/gw created
++ kubectl --context kind-kind apply -f /Users/sibasishbehera/kgateway/test/e2e/features/agentgateway/extproc/testdata/backend-service.yaml
+service/backend created
+deployment.apps/backend-0 created
++ kubectl --context kind-kind apply -f /Users/sibasishbehera/kgateway/test/e2e/features/agentgateway/extproc/testdata/extproc-service.yaml
+deployment.apps/ext-proc-grpc created
+service/ext-proc-grpc created
+2025-11-19T17:48:26.603901Z	info	expected pod default/gw-84ff7d7796-5svhj to have status Running, but it was Pending
+2025-11-19T17:48:28.608850Z	info	expected pod default/gw-84ff7d7796-5svhj to have condition ready, but it was not ready
+=== RUN   TestAgentgatewayIntegration/Extproc/TestExtProcWithGatewayTargetRef
++ kubectl --context kind-kind apply -f /Users/sibasishbehera/kgateway/test/e2e/features/agentgateway/extproc/testdata/gateway-targetref.yaml
+httproute.gateway.networking.k8s.io/route-1 created
+httproute.gateway.networking.k8s.io/route-2 created
+agentgatewaypolicy.gateway.kgateway.dev/gateway-test created
+    suite.go:86: Sleeping for 2 minutes to allow manual inspection of the cluster state...
+    suite.go:88: Sleep complete, starting test requests...
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:50:31.195597Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:interface {}(nil)}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:50:31 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   7051      0 --:--:-- --:--:-- --:--:-- 16909
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:50:33.489513Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:50:33 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3567      0 --:--:-- --:--:-- --:--:--  4179
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:50:35.790587Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:50:35 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3523      0 --:--:-- --:--:-- --:--:--  3915
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:50:38.085627Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:50:37 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   2353      0 --:--:-- --:--:-- --:--:--  4481
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:50:40.394220Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:50:40 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3757      0 --:--:-- --:--:-- --:--:--  4536
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:50:42.694363Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:50:42 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3547      0 --:--:-- --:--:-- --:--:--  4275
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:50:45.007696Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:50:44 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3401      0 --:--:-- --:--:-- --:--:--  4043
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" -H "Host: www.example.com" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:50:47.287086Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' -H 'Host: www.example.com' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:50:47 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3724      0 --:--:-- --:--:-- --:--:--  4536
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:50:49.586271Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:50:49 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3951      0 --:--:-- --:--:-- --:--:--  4481
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:50:51.898625Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:50:51 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3515      0 --:--:-- --:--:-- --:--:--  4376
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:50:54.190296Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:50:54 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3781      0 --:--:-- --:--:-- --:--:--  4376
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:50:56.490049Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:50:56 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3519      0 --:--:-- --:--:-- --:--:--  4133
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:50:58.794847Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:50:58 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3668      0 --:--:-- --:--:-- --:--:--  4481
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:01.089905Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:01 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3641      0 --:--:-- --:--:-- --:--:--  4708
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:03.389138Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:03 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3576      0 --:--:-- --:--:-- --:--:--  4708
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:05.691340Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:05 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3600      0 --:--:-- --:--:-- --:--:--  4179
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:07.981970Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:07 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0  11091      0 --:--:-- --:--:-- --:--:-- 24800
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" -H "Host: www.example.com" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:10.282775Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' -H 'Host: www.example.com' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:10 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0  10398      0 --:--:-- --:--:-- --:--:-- 24800
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" -H "Host: www.example.com" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:12.586965Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' -H 'Host: www.example.com' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:12 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3830      0 --:--:-- --:--:-- --:--:--  4376
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:14.893842Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:14 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3509      0 --:--:-- --:--:-- --:--:--  4428
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:17.194180Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:17 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3822      0 --:--:-- --:--:-- --:--:-- 11625
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:19.496038Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:19 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3619      0 --:--:-- --:--:-- --:--:--  4428
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:21.779557Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:21 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0  12455      0 --:--:-- --:--:-- --:--:-- 31000
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:24.084289Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:23 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3743      0 --:--:-- --:--:-- --:--:--  4325
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:26.388181Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:26 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3782      0 --:--:-- --:--:-- --:--:--  4769
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:28.682176Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:28 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0  15617      0 --:--:-- --:--:-- --:--:-- 28615
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
++ kubectl --context kind-kind exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H "Host: www.example.com" -H "instructions: {\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}" http://gw.default.svc.cluster.local:8080/
+2025-11-19T17:51:30.978733Z	info	executing curl with args: exec --container=curl curl -n curl -- curl --connect-timeout 1 --max-time 5 -v -H 'Host: www.example.com' -H 'instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}' http://gw.default.svc.cluster.local:8080/
+want:
+HttpResponse{StatusCode: 200, Body: &matchers.WithTransformMatcher{Transform:(func([]uint8) map[string]interface {})(0x106c50af0), Matcher:(*matchers.AndMatcher)(0x1400114e420), transformArgType:(*reflect.rtype)(0x10766dfa0), transformedValue:map[string]interface {}{"headers":map[string]interface {}{"Accept":[]interface {}{"*/*"}, "Instructions":[]interface {}{"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"}, "User-Agent":[]interface {}{"curl/7.83.1-DEV"}}, "host":"www.example.com", "ingress":"", "method":"GET", "namespace":"default", "path":"/", "pod":"backend-0-756dd7d576-hjwfz", "proto":"HTTP/1.1", "service":"backend"}}, Headers: map[], NotHeaders: [], Custom: <nil>}
+stdout:
+{
+ "path": "/",
+ "host": "www.example.com",
+ "method": "GET",
+ "proto": "HTTP/1.1",
+ "headers": {
+  "Accept": [
+   "*/*"
+  ],
+  "Instructions": [
+   "{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}"
+  ],
+  "User-Agent": [
+   "curl/7.83.1-DEV"
+  ]
+ },
+ "namespace": "default",
+ "ingress": "",
+ "service": "backend",
+ "pod": "backend-0-756dd7d576-hjwfz"
+}
+stderr:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 10.96.235.251:8080...
+* Connected to gw.default.svc.cluster.local (10.96.235.251) port 8080 (#0)
+> GET / HTTP/1.1
+> Host: www.example.com
+> User-Agent: curl/7.83.1-DEV
+> Accept: */*
+> instructions: {"addHeaders":{"extproctest":"true"},"removeHeaders":null}
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-type: application/json
+< x-content-type-options: nosniff
+< date: Wed, 19 Nov 2025 17:51:30 GMT
+< content-length: 372
+< 
+{ [372 bytes data]
+100   372  100   372    0     0   3682      0 --:--:-- --:--:-- --:--:--  4536
+* Connection #0 to host gw.default.svc.cluster.local left intact
+
+
+=== NAME  TestAgentgatewayIntegration
+    curl.go:71: 
+        Timed out after 60.174s.
+        failed to get expected response
+        The function passed to Eventually failed at /Users/sibasishbehera/kgateway/test/e2e/testutils/assertions/curl.go:65 with:
+        Expected
+            <map[string]interface {} | len:9>: {
+                "host": <string>"www.example.com",
+                "method": <string>"GET",
+                "namespace": <string>"default",
+                "pod": <string>"backend-0-756dd7d576-hjwfz",
+                "path": <string>"/",
+                "proto": <string>"HTTP/1.1",
+                "headers": <map[string]interface {} | len:3>{
+                    "Accept": <[]interface {} | len:1, cap:1>[<string>"*/*"],
+                    "Instructions": <[]interface {} | len:1, cap:1>[
+                        <string>"{\"addHeaders\":{\"extproctest\":\"true\"},\"removeHeaders\":null}",
+                    ],
+                    "User-Agent": <[]interface {} | len:1, cap:1>[
+                        <string>"curl/7.83.1-DEV",
+                    ],
+                },
+                "ingress": <string>"",
+                "service": <string>"backend",
+            }
+        to have {key: value} matching
+            <map[interface {}]interface {} | len:1>: {
+                <string>"headers": <*matchers.HaveKeyMatcher | 0x14001a84170>{
+                    Key: <string>"Extproctest",
+                },
+            } 
+        
+        expected: 
++ kubectl --context kind-kind delete -f /Users/sibasishbehera/kgateway/test/e2e/features/agentgateway/extproc/testdata/gateway-targetref.yaml --ignore-not-found
+httproute.gateway.networking.k8s.io "route-1" deleted from default namespace
+httproute.gateway.networking.k8s.io "route-2" deleted from default namespace
+agentgatewaypolicy.gateway.kgateway.dev "gateway-test" deleted from default namespace
+=== NAME  TestAgentgatewayIntegration/Extproc/TestExtProcWithGatewayTargetRef
+    testing.go:1811: test executed panic(nil) or runtime.Goexit: subtest may have called FailNow on a parent test
++ kubectl --context kind-kind delete -f /Users/sibasishbehera/kgateway/test/e2e/defaults/testdata/curl_pod.yaml --ignore-not-found
+namespace "curl" deleted
+pod "curl" deleted from curl namespace
++ kubectl --context kind-kind delete -f /Users/sibasishbehera/kgateway/test/e2e/features/agentgateway/extproc/testdata/gateway.yaml --ignore-not-found
+gateway.gateway.networking.k8s.io "gw" deleted from default namespace
++ kubectl --context kind-kind delete -f /Users/sibasishbehera/kgateway/test/e2e/features/agentgateway/extproc/testdata/backend-service.yaml --ignore-not-found
+service "backend" deleted from default namespace
+deployment.apps "backend-0" deleted from default namespace
++ kubectl --context kind-kind delete -f /Users/sibasishbehera/kgateway/test/e2e/features/agentgateway/extproc/testdata/extproc-service.yaml --ignore-not-found
+deployment.apps "ext-proc-grpc" deleted from default namespace
+service "ext-proc-grpc" deleted from default namespace
+=== NAME  TestAgentgatewayIntegration/Extproc
+    testing.go:1811: test executed panic(nil) or runtime.Goexit: subtest may have called FailNow on a parent test
++ kubectl --context kind-kind get namespaces --sort-by metadata.name -o jsonpath={.items[*].metadata.name}
+Test failed. Dumping state from agent-gateway-test, default, extproc-debug, istio-system, kube-node-lease, kube-public, kube-system, local-path-storage, metallb-system, zero-downtime...
++ kubectl --context kind-kind get all -A -o wide
++ kubectl --context kind-kind get secrets,backendtlspolicies.gateway.networking.k8s.io,gatewayclasses.gateway.networking.k8s.io,gateways.gateway.networking.k8s.io,grpcroutes.gateway.networking.k8s.io,httproutes.gateway.networking.k8s.io,referencegrants.gateway.networking.k8s.io,tcproutes.gateway.networking.k8s.io,tlsroutes.gateway.networking.k8s.io,udproutes.gateway.networking.k8s.io,backends.gateway.kgateway.dev,backendconfigpolicies.gateway.kgateway.dev,directresponses.gateway.kgateway.dev,gatewayextensions.gateway.kgateway.dev,gatewayparameters.gateway.kgateway.dev,httplistenerpolicies.gateway.kgateway.dev,trafficpolicies.gateway.kgateway.dev -A -owide
++ kubectl --context kind-kind describe all -A
++ kubectl --context kind-kind get endpoints -A
++ kubectl -n agent-gateway-test get pod
++ kubectl -n agent-gateway-test logs kgateway-5d5d5d77f7-kwb6v --all-containers
++ kubectl -n agent-gateway-test get crd
++ kubectl -n agent-gateway-test get agentgatewaypolicies.gateway.kgateway.dev
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get backendconfigpolicies.gateway.kgateway.dev
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get backends.gateway.kgateway.dev
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get backendtlspolicies.gateway.networking.k8s.io
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get directresponses.gateway.kgateway.dev
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get gatewayclasses.gateway.networking.k8s.io
++ kubectl -n agent-gateway-test get gatewayclasses.gateway.networking.k8s.io agentgateway -oyaml
++ kubectl -n agent-gateway-test get gatewayclasses.gateway.networking.k8s.io istio -oyaml
++ kubectl -n agent-gateway-test get gatewayclasses.gateway.networking.k8s.io istio-remote -oyaml
++ kubectl -n agent-gateway-test get gatewayclasses.gateway.networking.k8s.io kgateway -oyaml
++ kubectl -n agent-gateway-test get gatewayextensions.gateway.kgateway.dev
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get gatewayparameters.gateway.kgateway.dev
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get gateways.gateway.networking.k8s.io
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get grpcroutes.gateway.networking.k8s.io
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get httplistenerpolicies.gateway.kgateway.dev
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get httproutes.gateway.networking.k8s.io
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get inferencepools.inference.networking.k8s.io
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get referencegrants.gateway.networking.k8s.io
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get tcproutes.gateway.networking.k8s.io
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get tlsroutes.gateway.networking.k8s.io
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get trafficpolicies.gateway.kgateway.dev
+  No resources found in agent-gateway-test namespace.
++ kubectl -n agent-gateway-test get udproutes.gateway.networking.k8s.io
+  No resources found in agent-gateway-test namespace.
++ kubectl -n default get pod
+  No resources found in default namespace.
++ kubectl -n default get crd
++ kubectl -n default get agentgatewaypolicies.gateway.kgateway.dev
+  No resources found in default namespace.
++ kubectl -n default get backendconfigpolicies.gateway.kgateway.dev
+  No resources found in default namespace.
++ kubectl -n default get backends.gateway.kgateway.dev
+  No resources found in default namespace.
++ kubectl -n default get backendtlspolicies.gateway.networking.k8s.io
+  No resources found in default namespace.
++ kubectl -n default get directresponses.gateway.kgateway.dev
+  No resources found in default namespace.
++ kubectl -n default get gatewayclasses.gateway.networking.k8s.io
++ kubectl -n default get gatewayclasses.gateway.networking.k8s.io agentgateway -oyaml
++ kubectl -n default get gatewayclasses.gateway.networking.k8s.io istio -oyaml
++ kubectl -n default get gatewayclasses.gateway.networking.k8s.io istio-remote -oyaml
++ kubectl -n default get gatewayclasses.gateway.networking.k8s.io kgateway -oyaml
++ kubectl -n default get gatewayextensions.gateway.kgateway.dev
+  No resources found in default namespace.
++ kubectl -n default get gatewayparameters.gateway.kgateway.dev
+  No resources found in default namespace.
++ kubectl -n default get gateways.gateway.networking.k8s.io
+  No resources found in default namespace.
++ kubectl -n default get grpcroutes.gateway.networking.k8s.io
+  No resources found in default namespace.
++ kubectl -n default get httplistenerpolicies.gateway.kgateway.dev
+  No resources found in default namespace.
++ kubectl -n default get httproutes.gateway.networking.k8s.io
+  No resources found in default namespace.
++ kubectl -n default get inferencepools.inference.networking.k8s.io
+  No resources found in default namespace.
++ kubectl -n default get referencegrants.gateway.networking.k8s.io
+  No resources found in default namespace.
++ kubectl -n default get tcproutes.gateway.networking.k8s.io
+  No resources found in default namespace.
++ kubectl -n default get tlsroutes.gateway.networking.k8s.io
+  No resources found in default namespace.
++ kubectl -n default get trafficpolicies.gateway.kgateway.dev
+  No resources found in default namespace.
++ kubectl -n default get udproutes.gateway.networking.k8s.io
+  No resources found in default namespace.
++ kubectl -n extproc-debug get pod
++ kubectl -n extproc-debug logs backend-0-756dd7d576-ghdvz --all-containers
++ kubectl -n extproc-debug logs ext-proc-grpc-6765586f4f-6jdlf --all-containers
++ kubectl -n extproc-debug logs gw-84ff7d7796-mmpd8 --all-containers
++ kubectl -n extproc-debug get crd
++ kubectl -n extproc-debug get agentgatewaypolicies.gateway.kgateway.dev
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get backendconfigpolicies.gateway.kgateway.dev
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get backends.gateway.kgateway.dev
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get backendtlspolicies.gateway.networking.k8s.io
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get directresponses.gateway.kgateway.dev
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get gatewayclasses.gateway.networking.k8s.io
++ kubectl -n extproc-debug get gatewayclasses.gateway.networking.k8s.io agentgateway -oyaml
++ kubectl -n extproc-debug get gatewayclasses.gateway.networking.k8s.io istio -oyaml
++ kubectl -n extproc-debug get gatewayclasses.gateway.networking.k8s.io istio-remote -oyaml
++ kubectl -n extproc-debug get gatewayclasses.gateway.networking.k8s.io kgateway -oyaml
++ kubectl -n extproc-debug get gatewayextensions.gateway.kgateway.dev
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get gatewayparameters.gateway.kgateway.dev
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get gateways.gateway.networking.k8s.io
++ kubectl -n extproc-debug get gateways.gateway.networking.k8s.io gw -oyaml
++ kubectl -n extproc-debug get grpcroutes.gateway.networking.k8s.io
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get httplistenerpolicies.gateway.kgateway.dev
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get httproutes.gateway.networking.k8s.io
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get inferencepools.inference.networking.k8s.io
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get referencegrants.gateway.networking.k8s.io
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get tcproutes.gateway.networking.k8s.io
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get tlsroutes.gateway.networking.k8s.io
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get trafficpolicies.gateway.kgateway.dev
+  No resources found in extproc-debug namespace.
++ kubectl -n extproc-debug get udproutes.gateway.networking.k8s.io
+  No resources found in extproc-debug namespace.
++ kubectl -n istio-system get pod
++ kubectl -n istio-system logs istio-ingressgateway-846fd7db98-qqvcc --all-containers
++ kubectl -n istio-system logs istiod-7cc4f9b7f6-677xs --all-containers
++ kubectl -n istio-system get crd
++ kubectl -n istio-system get agentgatewaypolicies.gateway.kgateway.dev
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get backendconfigpolicies.gateway.kgateway.dev
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get backends.gateway.kgateway.dev
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get backendtlspolicies.gateway.networking.k8s.io
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get directresponses.gateway.kgateway.dev
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get gatewayclasses.gateway.networking.k8s.io
++ kubectl -n istio-system get gatewayclasses.gateway.networking.k8s.io agentgateway -oyaml
++ kubectl -n istio-system get gatewayclasses.gateway.networking.k8s.io istio -oyaml
++ kubectl -n istio-system get gatewayclasses.gateway.networking.k8s.io istio-remote -oyaml
++ kubectl -n istio-system get gatewayclasses.gateway.networking.k8s.io kgateway -oyaml
++ kubectl -n istio-system get gatewayextensions.gateway.kgateway.dev
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get gatewayparameters.gateway.kgateway.dev
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get gateways.gateway.networking.k8s.io
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get grpcroutes.gateway.networking.k8s.io
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get httplistenerpolicies.gateway.kgateway.dev
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get httproutes.gateway.networking.k8s.io
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get inferencepools.inference.networking.k8s.io
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get referencegrants.gateway.networking.k8s.io
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get tcproutes.gateway.networking.k8s.io
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get tlsroutes.gateway.networking.k8s.io
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get trafficpolicies.gateway.kgateway.dev
+  No resources found in istio-system namespace.
++ kubectl -n istio-system get udproutes.gateway.networking.k8s.io
+  No resources found in istio-system namespace.
++ kubectl -n kube-node-lease get pod
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get crd
++ kubectl -n kube-node-lease get agentgatewaypolicies.gateway.kgateway.dev
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get backendconfigpolicies.gateway.kgateway.dev
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get backends.gateway.kgateway.dev
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get backendtlspolicies.gateway.networking.k8s.io
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get directresponses.gateway.kgateway.dev
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get gatewayclasses.gateway.networking.k8s.io
++ kubectl -n kube-node-lease get gatewayclasses.gateway.networking.k8s.io agentgateway -oyaml
++ kubectl -n kube-node-lease get gatewayclasses.gateway.networking.k8s.io istio -oyaml
++ kubectl -n kube-node-lease get gatewayclasses.gateway.networking.k8s.io istio-remote -oyaml
++ kubectl -n kube-node-lease get gatewayclasses.gateway.networking.k8s.io kgateway -oyaml
++ kubectl -n kube-node-lease get gatewayextensions.gateway.kgateway.dev
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get gatewayparameters.gateway.kgateway.dev
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get gateways.gateway.networking.k8s.io
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get grpcroutes.gateway.networking.k8s.io
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get httplistenerpolicies.gateway.kgateway.dev
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get httproutes.gateway.networking.k8s.io
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get inferencepools.inference.networking.k8s.io
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get referencegrants.gateway.networking.k8s.io
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get tcproutes.gateway.networking.k8s.io
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get tlsroutes.gateway.networking.k8s.io
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get trafficpolicies.gateway.kgateway.dev
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-node-lease get udproutes.gateway.networking.k8s.io
+  No resources found in kube-node-lease namespace.
++ kubectl -n kube-public get pod
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get crd
++ kubectl -n kube-public get agentgatewaypolicies.gateway.kgateway.dev
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get backendconfigpolicies.gateway.kgateway.dev
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get backends.gateway.kgateway.dev
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get backendtlspolicies.gateway.networking.k8s.io
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get directresponses.gateway.kgateway.dev
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get gatewayclasses.gateway.networking.k8s.io
++ kubectl -n kube-public get gatewayclasses.gateway.networking.k8s.io agentgateway -oyaml
++ kubectl -n kube-public get gatewayclasses.gateway.networking.k8s.io istio -oyaml
++ kubectl -n kube-public get gatewayclasses.gateway.networking.k8s.io istio-remote -oyaml
++ kubectl -n kube-public get gatewayclasses.gateway.networking.k8s.io kgateway -oyaml
++ kubectl -n kube-public get gatewayextensions.gateway.kgateway.dev
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get gatewayparameters.gateway.kgateway.dev
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get gateways.gateway.networking.k8s.io
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get grpcroutes.gateway.networking.k8s.io
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get httplistenerpolicies.gateway.kgateway.dev
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get httproutes.gateway.networking.k8s.io
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get inferencepools.inference.networking.k8s.io
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get referencegrants.gateway.networking.k8s.io
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get tcproutes.gateway.networking.k8s.io
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get tlsroutes.gateway.networking.k8s.io
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get trafficpolicies.gateway.kgateway.dev
+  No resources found in kube-public namespace.
++ kubectl -n kube-public get udproutes.gateway.networking.k8s.io
+  No resources found in kube-public namespace.
++ kubectl -n kube-system get pod
++ kubectl -n kube-system logs coredns-66bc5c9577-lnxjf --all-containers
++ kubectl -n kube-system logs coredns-66bc5c9577-nk24f --all-containers
++ kubectl -n kube-system logs etcd-kind-control-plane --all-containers
++ kubectl -n kube-system logs kindnet-mwq6t --all-containers
++ kubectl -n kube-system logs kube-apiserver-kind-control-plane --all-containers
++ kubectl -n kube-system logs kube-controller-manager-kind-control-plane --all-containers
++ kubectl -n kube-system logs kube-proxy-lv7v2 --all-containers
++ kubectl -n kube-system logs kube-scheduler-kind-control-plane --all-containers
++ kubectl -n kube-system get crd
++ kubectl -n kube-system get agentgatewaypolicies.gateway.kgateway.dev
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get backendconfigpolicies.gateway.kgateway.dev
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get backends.gateway.kgateway.dev
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get backendtlspolicies.gateway.networking.k8s.io
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get directresponses.gateway.kgateway.dev
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get gatewayclasses.gateway.networking.k8s.io
++ kubectl -n kube-system get gatewayclasses.gateway.networking.k8s.io agentgateway -oyaml
++ kubectl -n kube-system get gatewayclasses.gateway.networking.k8s.io istio -oyaml
++ kubectl -n kube-system get gatewayclasses.gateway.networking.k8s.io istio-remote -oyaml
++ kubectl -n kube-system get gatewayclasses.gateway.networking.k8s.io kgateway -oyaml
++ kubectl -n kube-system get gatewayextensions.gateway.kgateway.dev
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get gatewayparameters.gateway.kgateway.dev
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get gateways.gateway.networking.k8s.io
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get grpcroutes.gateway.networking.k8s.io
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get httplistenerpolicies.gateway.kgateway.dev
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get httproutes.gateway.networking.k8s.io
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get inferencepools.inference.networking.k8s.io
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get referencegrants.gateway.networking.k8s.io
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get tcproutes.gateway.networking.k8s.io
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get tlsroutes.gateway.networking.k8s.io
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get trafficpolicies.gateway.kgateway.dev
+  No resources found in kube-system namespace.
++ kubectl -n kube-system get udproutes.gateway.networking.k8s.io
+  No resources found in kube-system namespace.
++ kubectl -n local-path-storage get pod
++ kubectl -n local-path-storage logs local-path-provisioner-7b8c8ddbd6-vdkkl --all-containers
++ kubectl -n local-path-storage get crd
++ kubectl -n local-path-storage get agentgatewaypolicies.gateway.kgateway.dev
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get backendconfigpolicies.gateway.kgateway.dev
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get backends.gateway.kgateway.dev
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get backendtlspolicies.gateway.networking.k8s.io
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get directresponses.gateway.kgateway.dev
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get gatewayclasses.gateway.networking.k8s.io
++ kubectl -n local-path-storage get gatewayclasses.gateway.networking.k8s.io agentgateway -oyaml
++ kubectl -n local-path-storage get gatewayclasses.gateway.networking.k8s.io istio -oyaml
++ kubectl -n local-path-storage get gatewayclasses.gateway.networking.k8s.io istio-remote -oyaml
++ kubectl -n local-path-storage get gatewayclasses.gateway.networking.k8s.io kgateway -oyaml
++ kubectl -n local-path-storage get gatewayextensions.gateway.kgateway.dev
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get gatewayparameters.gateway.kgateway.dev
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get gateways.gateway.networking.k8s.io
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get grpcroutes.gateway.networking.k8s.io
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get httplistenerpolicies.gateway.kgateway.dev
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get httproutes.gateway.networking.k8s.io
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get inferencepools.inference.networking.k8s.io
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get referencegrants.gateway.networking.k8s.io
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get tcproutes.gateway.networking.k8s.io
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get tlsroutes.gateway.networking.k8s.io
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get trafficpolicies.gateway.kgateway.dev
+  No resources found in local-path-storage namespace.
++ kubectl -n local-path-storage get udproutes.gateway.networking.k8s.io
+  No resources found in local-path-storage namespace.
++ kubectl -n metallb-system get pod
++ kubectl -n metallb-system logs controller-dd65485bc-9l2br --all-containers
++ kubectl -n metallb-system logs speaker-llblx --all-containers
++ kubectl -n metallb-system get crd
++ kubectl -n metallb-system get agentgatewaypolicies.gateway.kgateway.dev
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get backendconfigpolicies.gateway.kgateway.dev
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get backends.gateway.kgateway.dev
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get backendtlspolicies.gateway.networking.k8s.io
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get directresponses.gateway.kgateway.dev
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get gatewayclasses.gateway.networking.k8s.io
++ kubectl -n metallb-system get gatewayclasses.gateway.networking.k8s.io agentgateway -oyaml
++ kubectl -n metallb-system get gatewayclasses.gateway.networking.k8s.io istio -oyaml
++ kubectl -n metallb-system get gatewayclasses.gateway.networking.k8s.io istio-remote -oyaml
++ kubectl -n metallb-system get gatewayclasses.gateway.networking.k8s.io kgateway -oyaml
++ kubectl -n metallb-system get gatewayextensions.gateway.kgateway.dev
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get gatewayparameters.gateway.kgateway.dev
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get gateways.gateway.networking.k8s.io
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get grpcroutes.gateway.networking.k8s.io
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get httplistenerpolicies.gateway.kgateway.dev
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get httproutes.gateway.networking.k8s.io
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get inferencepools.inference.networking.k8s.io
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get referencegrants.gateway.networking.k8s.io
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get tcproutes.gateway.networking.k8s.io
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get tlsroutes.gateway.networking.k8s.io
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get trafficpolicies.gateway.kgateway.dev
+  No resources found in metallb-system namespace.
++ kubectl -n metallb-system get udproutes.gateway.networking.k8s.io
+  No resources found in metallb-system namespace.
++ kubectl -n zero-downtime get pod
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get crd
++ kubectl -n zero-downtime get agentgatewaypolicies.gateway.kgateway.dev
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get backendconfigpolicies.gateway.kgateway.dev
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get backends.gateway.kgateway.dev
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get backendtlspolicies.gateway.networking.k8s.io
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get directresponses.gateway.kgateway.dev
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get gatewayclasses.gateway.networking.k8s.io
++ kubectl -n zero-downtime get gatewayclasses.gateway.networking.k8s.io agentgateway -oyaml
++ kubectl -n zero-downtime get gatewayclasses.gateway.networking.k8s.io istio -oyaml
++ kubectl -n zero-downtime get gatewayclasses.gateway.networking.k8s.io istio-remote -oyaml
++ kubectl -n zero-downtime get gatewayclasses.gateway.networking.k8s.io kgateway -oyaml
++ kubectl -n zero-downtime get gatewayextensions.gateway.kgateway.dev
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get gatewayparameters.gateway.kgateway.dev
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get gateways.gateway.networking.k8s.io
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get grpcroutes.gateway.networking.k8s.io
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get httplistenerpolicies.gateway.kgateway.dev
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get httproutes.gateway.networking.k8s.io
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get inferencepools.inference.networking.k8s.io
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get referencegrants.gateway.networking.k8s.io
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get tcproutes.gateway.networking.k8s.io
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get tlsroutes.gateway.networking.k8s.io
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get trafficpolicies.gateway.kgateway.dev
+  No resources found in zero-downtime namespace.
++ kubectl -n zero-downtime get udproutes.gateway.networking.k8s.io
+  No resources found in zero-downtime namespace.
+Finished dumping kubernetes state
++ kubectl --context kind-kind get pod -n agent-gateway-test --selector kgateway=kgateway --output jsonpath='{.items[*].metadata.name}'
+found controller pods: kgateway-5d5d5d77f7-kwb6v
++ kubectl --context kind-kind -n agent-gateway-test logs kgateway-5d5d5d77f7-kwb6v -c kgateway --tail=1000
++ kubectl --context kind-kind debug -n agent-gateway-test -it --image=curlimages/curl:7.83.1 kgateway-5d5d5d77f7-kwb6v -- curl http://localhost:9091/metrics
++ kubectl port-forward -n agent-gateway-test pod/kgateway-5d5d5d77f7-kwb6v 9095:9095
++ curl --retry 3 --retry-delay 0 --retry-max-time 10 http://127.0.0.1:9095/snapshots/krt
++ curl --retry 3 --retry-delay 0 --retry-max-time 10 http://127.0.0.1:9095/snapshots/xds
+finished dumping controller state
++ kubectl --context kind-kind get pod -n default --selector kgateway=kgateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kgateway pods found in namespace default
+no kgateway=kgateway pods found in namespace default
++ kubectl --context kind-kind get pod -n extproc-debug --selector kgateway=kgateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kgateway pods found in namespace extproc-debug
+no kgateway=kgateway pods found in namespace extproc-debug
++ kubectl --context kind-kind get pod -n istio-system --selector kgateway=kgateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kgateway pods found in namespace istio-system
+no kgateway=kgateway pods found in namespace istio-system
++ kubectl --context kind-kind get pod -n kube-node-lease --selector kgateway=kgateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kgateway pods found in namespace kube-node-lease
+no kgateway=kgateway pods found in namespace kube-node-lease
++ kubectl --context kind-kind get pod -n kube-public --selector kgateway=kgateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kgateway pods found in namespace kube-public
+no kgateway=kgateway pods found in namespace kube-public
++ kubectl --context kind-kind get pod -n kube-system --selector kgateway=kgateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kgateway pods found in namespace kube-system
+no kgateway=kgateway pods found in namespace kube-system
++ kubectl --context kind-kind get pod -n local-path-storage --selector kgateway=kgateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kgateway pods found in namespace local-path-storage
+no kgateway=kgateway pods found in namespace local-path-storage
++ kubectl --context kind-kind get pod -n metallb-system --selector kgateway=kgateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kgateway pods found in namespace metallb-system
+no kgateway=kgateway pods found in namespace metallb-system
++ kubectl --context kind-kind get pod -n zero-downtime --selector kgateway=kgateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kgateway pods found in namespace zero-downtime
+no kgateway=kgateway pods found in namespace zero-downtime
++ kubectl --context kind-kind get pod -n agent-gateway-test --selector kgateway=kube-gateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kube-gateway pods found in namespace agent-gateway-test
+no proxies found in namespace agent-gateway-test
++ kubectl --context kind-kind get pod -n default --selector kgateway=kube-gateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kube-gateway pods found in namespace default
+no proxies found in namespace default
++ kubectl --context kind-kind get pod -n extproc-debug --selector kgateway=kube-gateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kube-gateway pods found in namespace extproc-debug
+no proxies found in namespace extproc-debug
++ kubectl --context kind-kind get pod -n istio-system --selector kgateway=kube-gateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kube-gateway pods found in namespace istio-system
+no proxies found in namespace istio-system
++ kubectl --context kind-kind get pod -n kube-node-lease --selector kgateway=kube-gateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kube-gateway pods found in namespace kube-node-lease
+no proxies found in namespace kube-node-lease
++ kubectl --context kind-kind get pod -n kube-public --selector kgateway=kube-gateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kube-gateway pods found in namespace kube-public
+no proxies found in namespace kube-public
++ kubectl --context kind-kind get pod -n kube-system --selector kgateway=kube-gateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kube-gateway pods found in namespace kube-system
+no proxies found in namespace kube-system
++ kubectl --context kind-kind get pod -n local-path-storage --selector kgateway=kube-gateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kube-gateway pods found in namespace local-path-storage
+no proxies found in namespace local-path-storage
++ kubectl --context kind-kind get pod -n metallb-system --selector kgateway=kube-gateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kube-gateway pods found in namespace metallb-system
+no proxies found in namespace metallb-system
++ kubectl --context kind-kind get pod -n zero-downtime --selector kgateway=kube-gateway --output jsonpath='{.items[*].metadata.name}'
+no kgateway=kube-gateway pods found in namespace zero-downtime
+no proxies found in namespace zero-downtime
+Test failed. Logs and cluster state are available in /Users/sibasishbehera/kgateway/_test/bug_report/kind/agent-gateway-test
++ helm uninstall kgateway --namespace agent-gateway-test --wait
+release "kgateway" uninstalled
++ helm uninstall kgateway-crds --namespace agent-gateway-test --wait
+release "kgateway-crds" uninstalled
+--- FAIL: TestAgentgatewayIntegration (247.29s)
+    --- FAIL: TestAgentgatewayIntegration/Extproc (215.02s)
+        --- FAIL: TestAgentgatewayIntegration/Extproc/TestExtProcWithGatewayTargetRef (180.44s)
+FAIL
+FAIL	github.com/kgateway-dev/kgateway/v2/test/e2e/tests	248.126s
+FAIL
