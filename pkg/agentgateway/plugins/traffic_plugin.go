@@ -840,8 +840,15 @@ func processExtProcPolicy(
 	if err != nil {
 		return nil, fmt.Errorf("failed to build extProc: %v", err)
 	}
+
+	failureMode := api.TrafficPolicySpec_ExtProc_FAIL_CLOSED
+	if extProc.FailOpen != nil && *extProc.FailOpen {
+		failureMode = api.TrafficPolicySpec_ExtProc_FAIL_OPEN
+	}
+
 	spec := &api.TrafficPolicySpec_ExtProc{
-		Target: be,
+		Target:      be,
+		FailureMode: failureMode,
 	}
 
 	extprocPolicy := &api.Policy{
@@ -860,7 +867,8 @@ func processExtProcPolicy(
 	logger.Info("generated ExtProc policy",
 		"policy", basePolicyName,
 		"agentgateway_policy", extprocPolicy.Name,
-		"target", policyTarget)
+		"target", policyTarget,
+		"failureMode", failureMode)
 
 	return []AgwPolicy{{Policy: extprocPolicy}}, nil
 }

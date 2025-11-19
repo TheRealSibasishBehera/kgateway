@@ -2105,6 +2105,12 @@ spec:
                         - message: Must have port for Service reference
                           rule: '(size(self.group) == 0 && self.kind == ''Service'')
                             ? has(self.port) : true'
+                      failOpen:
+                        default: true
+                        description: |-
+                          FailOpen determines if requests are allowed when the ext proc service is unavailable.
+                          Defaults to true, meaning requests are allowed upstream even if the ext proc service is unavailable.
+                        type: boolean
                     type: object
                   headerModifiers:
                     description: headerModifiers defines the policy to modify request
